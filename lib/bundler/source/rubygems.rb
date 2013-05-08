@@ -220,7 +220,14 @@ module Bundler
           old = Bundler.rubygems.sources
           idx = Index.new
 
-          fetchers       = remotes.map { |uri| Bundler::Fetcher.new(uri) }
+          all_remotes = remotes.dup
+          if Bundler.settings[:env_sources]
+            Bundler.settings[:env_sources].split(',').each { |uri|
+              all_remotes << normalize_uri(uri)
+            }
+          end
+
+          fetchers       = all_remotes.map { |uri| Bundler::Fetcher.new(uri) }
           api_fetchers   = fetchers.select { |f| f.use_api }
           index_fetchers = fetchers - api_fetchers
 
