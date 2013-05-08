@@ -233,4 +233,8 @@ namespace :vendor do
   end
 end
 
+task :geminabox do
+  sh "gem inabox pkg/bundler-#{Bundler::VERSION}.gem"
+end
+
 task :default => :spec
